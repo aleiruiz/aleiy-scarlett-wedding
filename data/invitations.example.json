@@ -1,0 +1,16 @@
+[
+  {
+    "groupName": "Familia Hernández",
+    "greeting": "Con mucho cariño, reservamos estos lugares para ustedes",
+    "guests": ["María Hernández", "Carlos Hernández"],
+    "maxPasses": 2,
+    "active": true,
+    "expiresAt": "2026-11-22T00:00:00-06:00"
+  },
+  {
+    "groupName": "Sofía Ramírez",
+    "guests": ["Sofía Ramírez"],
+    "maxPasses": 1,
+    "active": true
+  }
+]
