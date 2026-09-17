@@ -36,6 +36,12 @@ export const metadata: Metadata = {
   title: "Alei & Scarlett | Nuestra boda",
   description:
     "Acompáñanos a celebrar nuestra boda en Península Eventos, Santiago, Nuevo León.",
+  icons: {
+    icon: [
+      { url: "/wedding-monogram.png", type: "image/png" },
+    ],
+    apple: "/wedding-monogram.png",
+  },
   robots: { index: false, follow: false },
   openGraph: {
     title: "Alei & Scarlett | Nuestra boda",
@@ -50,7 +56,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="es-MX"
       className={`${cormorant.variable} ${montserrat.variable} ${italiana.variable} ${parisienne.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}>
+          <defs>
+            <filter id="monogram-gold" colorInterpolationFilters="sRGB">
+              <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 -1 0 1" />
+              <feComposite in2="SourceGraphic" operator="in" />
+            </filter>
+            <filter id="monogram-white" colorInterpolationFilters="sRGB">
+              <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  -0.3189 -1.0728 -0.1083 0 1.5" />
+              <feComposite in2="SourceGraphic" operator="in" />
+            </filter>
+          </defs>
+        </svg>
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,16 +1,16 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { wedding } from "@/content/wedding";
+import { Monogram } from "@/components/wedding/Monogram";
 
 export default function Home() {
   return (
     <main className="entry-page">
       <div className="entry-overlay" />
       <div className="entry-card">
-        <p className="entry-monogram">{wedding.couple.initials}</p>
         <p className="eyebrow light">Nuestra boda</p>
-        <h1>
-          {wedding.couple.first} <i>&</i> {wedding.couple.second}
+        <h1 aria-label="Alei y Scarlett">
+          <Monogram tone="white" className="hero-monogram" />
         </h1>
         <p>{wedding.date.display}</p>
         <p className="entry-note">

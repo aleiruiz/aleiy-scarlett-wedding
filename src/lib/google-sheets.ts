@@ -1,4 +1,5 @@
 import "server-only";
+import { gunzipSync } from "node:zlib";
 
 import { google, sheets_v4 } from "googleapis";
 import type {
@@ -10,8 +11,7 @@ import type {
 import { validateSubmissionForInvitation } from "@/lib/rsvp-validation";
 import { AppError } from "@/lib/app-error";
 
-const INVITATIONS_RANGE = "Invitaciones!A2:G";
-const RESPONSES_RANGE = "Confirmaciones!A2:I";
+const SHEET_RANGE = "Sheet1!A3:N";
 const DEMO_TOKEN = "demo-alei-scarlett-2026";
 const tokenWrites = new Map<string, Promise<void>>();
 
@@ -42,6 +42,7 @@ const demoInvitation: Invitation = {
   ],
   maxPasses: 2,
   active: true,
+  civil: true,
 };
 
 function hasSheetsConfiguration() {
@@ -82,57 +83,36 @@ function parseGuests(value: string): Guest[] {
   return parsed as Guest[];
 }
 
-async function getExistingResponse(
-  sheets: sheets_v4.Sheets,
-  token: string,
-): Promise<Invitation["response"] | undefined> {
-  const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
-  const result = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: RESPONSES_RANGE,
-  });
-  const rows = result.data.values ?? [];
-  const matching = rows.filter((row) => row[0] === token);
-
-  if (matching.length === 0) return undefined;
-
-  return {
-    guests: matching.map(
-      (row): GuestResponse => ({
-        guestId: String(row[1]),
-        attending: String(row[3]).toLowerCase() === "sí",
-        dietary: String(row[4] ?? ""),
-      }),
-    ),
-    phone: String(matching[0][5] ?? ""),
-    message: String(matching[0][6] ?? ""),
-  };
-}
-
 export async function getInvitation(
   token: string,
 ): Promise<Invitation | null> {
   if (!hasSheetsConfiguration()) {
-    return token === DEMO_TOKEN ? demoInvitation : null;
+    if (token === DEMO_TOKEN) return demoInvitation;
+    const stored = process.env.INVITATIONS_JSON?.trim() || "[]";
+    const json = stored.startsWith("gzip:")
+      ? gunzipSync(Buffer.from(stored.slice(5), "base64")).toString("utf8")
+      : stored;
+    const invitations = JSON.parse(json) as Invitation[];
+    return invitations.find((item) => item.token === token && item.active) ?? null;
   }
 
   const sheets = getSheetsClient();
   const result = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
-    range: INVITATIONS_RANGE,
+    range: SHEET_RANGE,
   });
-  const row = (result.data.values ?? []).find((item) => item[0] === token);
+  const row = (result.data.values ?? []).find((item) => item[12] === token);
 
   if (!row) return null;
 
   const invitation: Invitation = {
-    token: String(row[0]),
-    groupName: String(row[1]),
-    greeting: String(row[2]),
-    guests: parseGuests(String(row[3])),
-    maxPasses: Number(row[4]),
-    active: String(row[5]).toLowerCase() !== "no",
-    expiresAt: row[6] ? String(row[6]) : undefined,
+    token,
+    groupName: String(row[0] ?? "Invitados"),
+    greeting: "Con mucho cariño, reservamos estos lugares para ustedes.",
+    guests: [{ id: `${token}-guest`, name: String(row[0] ?? "Invitado") }],
+    maxPasses: Number(row[1]) || 1,
+    active: true,
+    civil: String(row[11] ?? "").trim().toUpperCase() === "CIVIL",
   };
 
   const isExpired =
@@ -140,7 +120,9 @@ export async function getInvitation(
     new Date(invitation.expiresAt).getTime() < Date.now();
   if (!invitation.active || isExpired) return null;
 
-  invitation.response = await getExistingResponse(sheets, token);
+  invitation.response = row[9]
+    ? { guests: [{ guestId: `${token}-guest`, attending: String(row[9]).toLowerCase() === "sí", dietary: "" }], phone: String(row[5] ?? ""), message: "" }
+    : undefined;
   return invitation;
 }
 
@@ -159,6 +141,9 @@ async function saveRsvpUnsafe(submission: RsvpSubmission) {
   validateSubmissionForInvitation(submission, invitation);
 
   if (!hasSheetsConfiguration()) {
+    if (submission.token !== DEMO_TOKEN) {
+      throw new AppError("Las confirmaciones aún no están habilitadas. Inténtalo más tarde.", 503);
+    }
     return { updated: false, demo: true };
   }
 
@@ -166,60 +151,22 @@ async function saveRsvpUnsafe(submission: RsvpSubmission) {
   const spreadsheetId = process.env.GOOGLE_SHEETS_ID;
   const responseRows = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: RESPONSES_RANGE,
+    range: SHEET_RANGE,
   });
   const rows = responseRows.data.values ?? [];
-  const now = new Date().toISOString();
-
-  const updates: sheets_v4.Schema$ValueRange[] = [];
-  const additions: unknown[][] = [];
-
-  for (const guestResponse of submission.guests) {
+  const guestResponse = submission.guests[0];
+  if (guestResponse) {
     const guest = invitation.guests.find(
       (item) => item.id === guestResponse.guestId,
     );
-    if (!guest) continue;
+    if (!guest) return { updated: false, demo: false };
 
     const values = [
-      submission.token,
-      guest.id,
-      guest.name,
       guestResponse.attending ? "Sí" : "No",
-      guestResponse.dietary ?? "",
-      submission.phone,
-      submission.message ?? "",
-      now,
-      invitation.groupName,
+      submission.guests.filter((item) => item.attending).length,
     ];
-    const existingIndex = rows.findIndex(
-      (row) => row[0] === submission.token && row[1] === guest.id,
-    );
-
-    if (existingIndex >= 0) {
-      updates.push({
-        range: `Confirmaciones!A${existingIndex + 2}:I${existingIndex + 2}`,
-        values: [values],
-      });
-    } else {
-      additions.push(values);
-    }
-  }
-
-  if (updates.length > 0) {
-    await sheets.spreadsheets.values.batchUpdate({
-      spreadsheetId,
-      requestBody: { valueInputOption: "RAW", data: updates },
-    });
-  }
-
-  if (additions.length > 0) {
-    await sheets.spreadsheets.values.append({
-      spreadsheetId,
-      range: RESPONSES_RANGE,
-      valueInputOption: "RAW",
-      insertDataOption: "INSERT_ROWS",
-      requestBody: { values: additions },
-    });
+    const existingIndex = rows.findIndex((row) => row[12] === submission.token);
+    if (existingIndex >= 0) await sheets.spreadsheets.values.batchUpdate({ spreadsheetId, requestBody: { valueInputOption: "RAW", data: [{ range: `Sheet1!J${existingIndex + 3}:K${existingIndex + 3}`, values: [values] }] } });
   }
 
   return { updated: true, demo: false };

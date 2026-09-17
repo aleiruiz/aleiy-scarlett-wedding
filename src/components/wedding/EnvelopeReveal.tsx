@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { wedding } from "@/content/wedding";
+import { Monogram } from "./Monogram";
 
 export function EnvelopeReveal({
   groupName,
@@ -34,6 +35,7 @@ export function EnvelopeReveal({
 
   function openInvitation() {
     if (phase !== "closed") return;
+    window.dispatchEvent(new Event("invitation:open"));
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setPhase("opened");
       document.documentElement.classList.add("invitation-opened");
@@ -68,11 +70,7 @@ export function EnvelopeReveal({
           <span className="envelope-back" />
           <span className="envelope-letter">
             <span className="letter-eyebrow">Nos casamos</span>
-            <strong>
-              {wedding.couple.first}
-              <i>&</i>
-              {wedding.couple.second}
-            </strong>
+            <Monogram className="letter-monogram" />
             <span className="letter-date">{wedding.date.short}</span>
           </span>
           <span className="envelope-side-fold envelope-side-fold-left" />
@@ -87,7 +85,7 @@ export function EnvelopeReveal({
             aria-hidden="true"
           />
           <span className="wax-seal">
-            <span className="wax-seal-text">{wedding.couple.initials}</span>
+            <Monogram tone="white" className="wax-seal-text" />
           </span>
           <Image
             className="envelope-flowers envelope-flowers-left"

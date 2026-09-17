@@ -99,18 +99,24 @@ h3 {
 .botanical-divider {
   display: block;
   width: 150px;
-  height: auto;
+  height: 30px;
   margin: 1.25rem auto 1.6rem;
-  overflow: visible;
-  fill: none;
-  stroke: var(--gold);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 0.9;
+  background-image: url("/separator-rainbow-transparent.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  mix-blend-mode: multiply;
 }
 
+.botanical-divider.motif-0 { background-image: url("/separator-rainbow-transparent.png"); }
+.botanical-divider.motif-1 { background-image: url("/separator-paw-transparent.png"); }
+.botanical-divider.motif-2 { background-image: url("/separator-star-transparent.png"); }
+.botanical-divider.motif-3 { background-image: url("/separator-sun-transparent.png"); }
+.botanical-divider.motif-4 { background-image: url("/separator-heart-transparent.png"); }
+
 .botanical-divider.light {
-  stroke: #cdb98f;
+  opacity: .9;
+  mix-blend-mode: screen;
 }
 
 .with-side-florals,
@@ -1104,7 +1110,7 @@ h3 {
 .gallery-four {
   background-image:
     linear-gradient(rgba(35, 51, 38, 0.08), rgba(35, 51, 38, 0.08)),
-    url("/photos/gallery-mountain.webp");
+    url("/photos/gallery-dance.jpeg");
   grid-column: 2 / 4;
 }
 
@@ -1127,7 +1133,7 @@ h3 {
 .gallery-quote p {
   max-width: 310px;
   margin-bottom: 1rem;
-  font-family: var(--font-script), cursive;
+  font-family: var(--font-display), serif;
   font-size: clamp(1.8rem, 3vw, 2.7rem);
   line-height: 1.05;
 }
@@ -1146,16 +1152,6 @@ h3 {
     radial-gradient(circle at 0% 16%, rgba(123, 137, 113, 0.16), transparent 28%),
     radial-gradient(circle at 100% 88%, rgba(173, 121, 99, 0.12), transparent 26%),
     #ede7da;
-}
-
-.details::before {
-  position: absolute;
-  top: 4rem;
-  left: max(6vw, 1.5rem);
-  width: min(18vw, 220px);
-  height: 1px;
-  background: var(--gold);
-  content: "";
 }
 
 .details .section-heading {
@@ -1223,19 +1219,16 @@ h3 {
   color: var(--clay);
 }
 
-.event-number {
-  position: absolute;
-  top: -1.2rem;
-  right: 1rem;
-  color: rgba(75, 91, 73, 0.1);
-  font-family: var(--font-display), serif;
-  font-size: 8rem;
-  line-height: 1;
-}
-
 .event-card h3 {
   margin-bottom: 0.6rem;
   font-size: 2.1rem;
+}
+
+.event-card:only-child {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 650px;
+  justify-self: center;
 }
 
 .event-card > p:not(.eyebrow, .event-time) {
@@ -1321,14 +1314,15 @@ h3 {
   max-width: 1240px;
   margin: auto;
   gap: clamp(1.5rem, 4vw, 4rem);
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .info-card {
   position: relative;
   display: flex;
+  min-width: 0;
   min-height: 510px;
-  padding: clamp(2.5rem, 6vw, 5rem);
+  padding: clamp(2rem, 4vw, 4rem);
   align-items: center;
   flex-direction: column;
   justify-content: center;
@@ -1760,6 +1754,37 @@ footer {
   letter-spacing: 0.28em;
 }
 
+.background-music-player {
+  position: fixed;
+  left: -10000px;
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+}
+
+.music-toggle {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--forest);
+  box-shadow: 0 4px 20px rgba(38, 58, 43, 0.18);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.music-toggle:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
+}
 .entry-page {
   position: relative;
   display: grid;
@@ -2039,7 +2064,7 @@ footer {
   }
 
   .story-photo::before {
-    right: -0.7rem;
+    display: none;
   }
 
   .story-copy {
@@ -2051,22 +2076,26 @@ footer {
   }
 
   .photo-gallery {
+    display: flex;
+    flex-direction: column;
+    max-width: 540px;
     min-height: 0;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(2, 300px) auto 360px;
+    gap: 1rem;
   }
 
-  .gallery-one {
-    grid-row: 1 / 3;
+  .gallery-photo {
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 3 / 4;
   }
 
-  .gallery-quote,
-  .gallery-four {
-    grid-column: 1 / 3;
+  .gallery-two {
+    aspect-ratio: 1;
   }
 
-  .gallery-four {
-    min-height: 360px;
+  .gallery-quote {
+    min-height: 240px;
+    padding: 2.5rem 1.5rem;
   }
 
   .event-grid {
@@ -2200,23 +2229,6 @@ footer {
     transform: translateY(17vh) scale(1.08);
   }
 
-  .photo-gallery {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .gallery-photo {
-    min-height: 390px;
-  }
-
-  .gallery-one {
-    min-height: 500px;
-  }
-
-  .gallery-quote {
-    min-height: 310px;
-  }
-
   .countdown-number {
     font-size: 2rem;
   }
@@ -2241,3 +2253,38 @@ footer {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* The supplied monogram replaces the decorative initials throughout the invitation. */
+.wedding-monogram {
+  display: block;
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  filter: url(#monogram-gold);
+  mix-blend-mode: normal;
+}
+.monogram-white {
+  filter: url(#monogram-white);
+  mix-blend-mode: normal;
+}
+.monogram-black { filter: grayscale(1); }
+.monogram .wedding-monogram { width: 54px; }
+.hero h1, .entry-card h1 { isolation: auto; }
+.hero-monogram { width: clamp(210px, 28vw, 320px); margin: 0 auto; }
+.wedding-monogram.signature { width: 130px; margin-top: 1.5rem; }
+.photo-frame-text .wedding-monogram { width: 90px; }
+.gallery-quote .wedding-monogram { width: 78px; margin-top: 0.5rem; }
+.wedding-monogram.footer-monogram { width: 130px; margin: 0 auto 1.5rem; }
+.wedding-monogram.letter-monogram { width: clamp(75px, 15vw, 120px); margin: 0.5rem auto; }
+.wedding-monogram.wax-seal-text { width: 75%; }
+.attire-guidelines { margin: 1.25rem 0; }
+.attire-guidelines p { margin-bottom: 0.35rem; }
+.attire-celebration { color: var(--clay); font-weight: 600; }
+.attire-reserved { border-top: 1px solid var(--line); padding-top: 1.2rem; margin-top: 1.5rem; }
+.calendar-button { margin-top: 0.75rem; }
+.calendar-actions { margin-top: 1rem; }
+.calendar-label { display: inline-flex; align-items: center; gap: .45rem; margin: 0 0 .65rem; color: var(--forest); font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.calendar-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .55rem; }
+.calendar-links .button { min-height: 40px; padding: .65rem .9rem; font-size: .58rem; }
+.calendar-download { display: inline-flex; align-items: center; padding: .5rem; color: var(--sage-dark); font-size: .64rem; text-decoration: underline; }
+.gift-card .calendar-label { color: #d6dbd3; }

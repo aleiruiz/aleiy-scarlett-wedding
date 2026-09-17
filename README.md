@@ -46,7 +46,7 @@ La selección y las posiciones de cada fotografía se encuentran en
 2. En `Invitaciones`, usa estas columnas desde A hasta G:
 
 ```text
-token | groupName | greeting | guestsJson | maxPasses | active | expiresAt
+token | groupName | greeting | guestsJson | maxPasses | active | expiresAt | civil
 ```
 
 3. En `Confirmaciones`, usa estas columnas desde A hasta I:
@@ -69,6 +69,15 @@ INVITATION_BASE_URL
 
 La llave privada debe conservar los saltos de línea como `\n`. Las credenciales
 solo se usan en el servidor y nunca se envían al navegador.
+
+La columna `civil` debe contener `CIVIL` para mostrar ceremonia y llegada temprana.
+Un valor vacío oculta ambos eventos y la tarjeta de ceremonia.
+
+Sin credenciales de Sheets, `INVITATIONS_JSON` permite cargar una copia privada
+de las invitaciones en el servidor (array del tipo `Invitation`, con `civil`
+booleano). Esta copia requiere actualizar la variable y desplegar de nuevo cuando
+cambie la lista. En este modo las confirmaciones reales devuelven un error explícito
+y no se guardan; solo la invitación de demostración admite respuestas simuladas.
 
 ## Generar invitaciones
 

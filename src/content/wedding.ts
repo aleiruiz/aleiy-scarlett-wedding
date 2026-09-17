@@ -1,11 +1,15 @@
 export const wedding = {
+  music: {
+    youtubeVideoId: "ZRztvfiu-RM",
+  },
   couple: {
     first: "Alei",
     second: "Scarlett",
     initials: "A · S",
   },
   date: {
-    iso: "2026-11-21T16:30:00-06:00",
+    iso: "2026-11-21T18:00:00-06:00",
+    receptionIso: "2026-11-21T19:00:00-06:00",
     display: "21 de noviembre de 2026",
     short: "21 · 11 · 26",
     rsvpDeadline: "21 de octubre de 2026",
@@ -27,14 +31,14 @@ export const wedding = {
   story: {
     title: "Nuestra historia",
     body: [
-      "Hay encuentros que cambian el rumbo de todo. El nuestro empezó con una conversación sencilla y, sin darnos cuenta, se convirtió en hogar.",
-      "Después de tantas aventuras, aprendizajes y domingos compartidos, elegimos decir sí a la siguiente etapa. Gracias por ser parte de nuestra historia.",
+      "Fue un 30 de mayo cuando cruzamos miradas por primera vez y hoy, después de 13 años, dos hijos, un hogar y una vida compartida, elegimos dar el siguiente paso: seguir eligiéndonos para siempre",
     ],
   },
   events: [
     {
       type: "Ceremonia",
-      time: "4:30 p. m.",
+      civilOnly: true,
+      time: "6:00 p. m.",
       venue: "Península Eventos",
       address: "Neptuno 316, Las Cristalinas, 67317 Santiago, N.L.",
       mapUrl:
@@ -42,7 +46,8 @@ export const wedding = {
     },
     {
       type: "Recepción",
-      time: "6:30 p. m.",
+      civilOnly: false,
+      time: "7:00 p. m.",
       venue: "Península Eventos",
       address: "Neptuno 316, Las Cristalinas, 67317 Santiago, N.L.",
       mapUrl:
@@ -50,23 +55,28 @@ export const wedding = {
     },
   ],
   schedule: [
-    { time: "4:00 p. m.", label: "Llegada de invitados" },
-    { time: "4:30 p. m.", label: "Ceremonia" },
-    { time: "6:30 p. m.", label: "Cóctel de bienvenida" },
-    { time: "8:00 p. m.", label: "Cena" },
-    { time: "9:30 p. m.", label: "Baile y celebración" },
+    { time: "6:00 p. m.", label: "Ceremonia civil", civilOnly: true },
+    { time: "7:00 p. m.", label: "Recepción", civilOnly: false },
+    { time: "7:30 p. m.", label: "Cena", civilOnly: false },
+    { time: "8:30 p. m.", label: "Se abre la pista", civilOnly: false },
+    { time: "9:00 p. m.", label: "Happening", civilOnly: false },
+    { time: "10:15 p. m.", label: "Lanzamiento del ramo", civilOnly: false },
+    { time: "10:30 p. m.", label: "Trasnochador", civilOnly: false },
   ],
   attire: {
     title: "Código de vestimenta",
-    style: "Formal campestre",
-    note: "Ellas: vestido largo o midi. Ellos: traje. La celebración será en jardín; sugerimos calzado cómodo y evitar los tonos blanco, marfil y verde salvia.",
+    style: "Formal",
+    women: "Vestido largo o midi.",
+    men: "Traje.",
+    note: "La celebración será en jardín. Los invitamos a vestir tonos coloridos y vibrantes, manteniendo el código formal.",
+    celebration: "¡Queremos ver el jardín lleno de color!",
+    reserved: "Reservamos los tonos blancos y claros para la novia.",
   },
   gifts: {
     title: "Mesa de regalos",
-    note: "Tu presencia es nuestro mejor regalo. Si deseas tener un detalle con nosotros, preparamos estas opciones.",
+    note: "Tu presencia es nuestro mejor regalo. Si deseas tener un detalle con nosotros, preparamos esta mesa de regalos.",
     links: [
-      { label: "Liverpool", url: "https://mesaderegalos.liverpool.com.mx/" },
-      { label: "Palacio de Hierro", url: "https://www.elpalaciodehierro.com/mesa-de-regalos/" },
+      { label: "Amazon", url: "https://www.amazon.com.mx/wedding/share/AleiyScarlett0706" },
     ],
   },
   faq: [
@@ -85,7 +95,7 @@ export const wedding = {
   ],
   contact: {
     label: "¿Tienes alguna duda?",
-    whatsappUrl: "https://wa.me/5210000000000",
+    whatsappUrl: "https://wa.me/528128243031",
   },
 } as const;
 

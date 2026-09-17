@@ -10,6 +10,7 @@ export type Invitation = {
   guests: Guest[];
   maxPasses: number;
   active: boolean;
+  civil?: boolean;
   expiresAt?: string;
   response?: {
     guests: GuestResponse[];
