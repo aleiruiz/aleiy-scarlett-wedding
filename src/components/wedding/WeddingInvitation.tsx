@@ -159,6 +159,10 @@ export function WeddingInvitation({
             data-reveal="scale"
             data-delay="1"
           />
+          <div className="gallery-quote" data-reveal="up" data-delay="2">
+            <Heart size={22} strokeWidth={1.2} aria-hidden="true" />
+            <p>Contigo, todos los caminos se sienten como casa.</p>
+          </div>
           <div
             className="gallery-photo gallery-three"
             role="img"
