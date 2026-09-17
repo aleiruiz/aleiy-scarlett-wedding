@@ -98,9 +98,11 @@ function invitationFromRow(token: string, row: unknown[]): Invitation {
     throw new Error("Usa hasta 20 nombres distintos en la columna O.");
   }
   const maxPasses = Number(row[1]) || 1;
-  const guestNames = names.length
-    ? names
-    : Array.from({ length: maxPasses }, (_, index) => `Invitado ${index + 1}`);
+  const guestNames = [...names];
+  for (let index = 1; guestNames.length < maxPasses; index += 1) {
+    const genericName = `Invitado ${index}`;
+    if (!guestNames.includes(genericName)) guestNames.push(genericName);
+  }
   const invitation: Invitation = {
     token,
     groupName: String(row[0] ?? "Invitados"),

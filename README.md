@@ -63,8 +63,9 @@ La selección y las posiciones de cada fotografía se encuentran en
 3. En O escribe hasta 20 nombres distintos separados por ` - `, por ejemplo
    `Nancy Ortega - Jorge Muñoz`. No necesitas escribir JSON.
    Los pases en B limitan cuántas personas pueden confirmar asistencia.
-   Si O está vacío, el sitio muestra `Invitado 1`, `Invitado 2`, etc., según
-   los pases de B. Para desactivar una invitación, elimina su fila.
+   Si faltan nombres para completar los pases, el sitio agrega `Invitado 1`,
+   `Invitado 2`, etc. Por ejemplo, `Nancy Ortega` con 2 pases muestra a Nancy
+   y a `Invitado 1`. Para desactivar una invitación, elimina su fila.
 
 4. En Google Cloud, habilita **Google Sheets API** y crea una cuenta de
    servicio.

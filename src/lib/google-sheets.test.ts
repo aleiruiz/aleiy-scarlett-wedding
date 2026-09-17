@@ -68,6 +68,14 @@ describe("invitaciones en Google Sheets", () => {
     expect((await getInvitation(token))?.guests.map((guest) => guest.name)).toEqual(["Ana", "Luis"]);
   });
 
+  it("completa los pases sin nombre con invitados genéricos", async () => {
+    row[14] = "Nancy Ortega";
+    expect((await getInvitation(token))?.guests.map((guest) => guest.name)).toEqual([
+      "Nancy Ortega",
+      "Invitado 1",
+    ]);
+  });
+
   it("no informa éxito si la fila desaparece antes de guardar", async () => {
     const invitation = (await getInvitation(token))!;
     get.mockResolvedValueOnce({ data: { values: [row] } }).mockResolvedValueOnce({ data: { values: [] } });
