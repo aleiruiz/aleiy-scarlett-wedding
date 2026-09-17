@@ -42,18 +42,28 @@ La selección y las posiciones de cada fotografía se encuentran en
 
 ## Configurar Google Sheets
 
-1. Crea una hoja y agrega dos pestañas: `Invitaciones` y `Confirmaciones`.
-2. En `Invitaciones`, usa estas columnas desde A hasta G:
+1. Usa una pestaña llamada `Sheet1`. Las filas 1 y 2 son para título y
+   encabezados; las invitaciones empiezan en la fila 3, una familia por fila.
+2. Configura estas columnas; las demás se conservan sin cambios:
 
-```text
-token | groupName | greeting | guestsJson | maxPasses | active | expiresAt | civil
-```
+| Columna | Contenido |
+| --- | --- |
+| A | Nombre de la familia o grupo |
+| B | Número de pases |
+| F | WhatsApp (se actualiza al responder) |
+| J | Resumen automático: Sí, No o Parcial |
+| K | Total de asistentes confirmados |
+| L | `CIVIL` si incluye ceremonia civil; vacío en otro caso |
+| M | Token privado único, de 16 a 200 caracteres |
+| N | Enlace: `https://tu-dominio.com/invitacion/TOKEN` |
+| O | Nombres completos, uno por línea dentro de la misma celda |
+| P | Respuesta JSON automática; no editar |
+| Q | Resumen automático por nombre: Confirmado o No asistirá |
 
-3. En `Confirmaciones`, usa estas columnas desde A hasta I:
-
-```text
-token | guestId | guestName | attending | dietary | phone | message | submittedAt | groupName
-```
+3. En O escribe hasta 20 nombres distintos. No necesitas escribir JSON.
+   Los pases en B limitan cuántas personas pueden confirmar asistencia.
+   Sin nombres en O se conserva el comportamiento anterior: A es el único
+   nombre mostrado. Para desactivar una invitación, elimina su fila.
 
 4. En Google Cloud, habilita **Google Sheets API** y crea una cuenta de
    servicio.
@@ -70,8 +80,15 @@ INVITATION_BASE_URL
 La llave privada debe conservar los saltos de línea como `\n`. Las credenciales
 solo se usan en el servidor y nunca se envían al navegador.
 
-La columna `civil` debe contener `CIVIL` para mostrar ceremonia y llegada temprana.
+La columna L debe contener `CIVIL` para mostrar ceremonia y llegada temprana.
 Un valor vacío oculta ambos eventos y la tarjeta de ceremonia.
+
+Cada invitación privada muestra los estados guardados junto a los nombres.
+Los cambios de nombres en Sheets aparecen al recargar la página. Reordenarlos
+conserva las respuestas; agregar o renombrar una persona deja su estado pendiente.
+J y Q son resúmenes: modificarlos manualmente no sustituye las respuestas en P.
+Las filas antiguas sin O ni P siguen leyendo Sí/No de J; otros valores se
+consideran pendientes. Cada familia solo ve los datos de su enlace privado.
 
 Sin credenciales de Sheets, `INVITATIONS_JSON` permite cargar una copia privada
 de las invitaciones en el servidor (array del tipo `Invitation`, con `civil`
@@ -89,10 +106,10 @@ y no se guardan; solo la invitación de demostración admite respuestas simulada
 npm run generate:invitations
 ```
 
-El archivo `data/invitations.generated.csv` incluye tokens aleatorios, JSON de
-invitados, enlaces privados y mensajes listos para WhatsApp. Importa las
-columnas A–G en la pestaña `Invitaciones`. Las columnas H–I son solo para
-distribución y no necesita importarlas.
+El archivo `data/invitations.generated.csv` incluye las columnas A–Q y tokens
+aleatorios. Importa sus encabezados en la fila 2 de `Sheet1` y sus datos desde
+la fila 3. No sobrescribas invitaciones que ya repartiste: regenerar crea enlaces
+nuevos. Para agregar personas a un grupo existente, edita O directamente.
 
 Para indicar rutas distintas:
 
@@ -105,7 +122,7 @@ consecutivos como token.
 
 ## Comportamiento del RSVP
 
-- El servidor comprueba que el token esté activo y no haya vencido.
+- El servidor comprueba que el token exista en la hoja.
 - Solo acepta las personas nominadas en esa invitación.
 - Nunca permite confirmar más asistentes que pases asignados.
 - Un segundo envío actualiza las filas existentes en lugar de duplicarlas.

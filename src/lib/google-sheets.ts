@@ -1,17 +1,16 @@
 import "server-only";
 import { gunzipSync } from "node:zlib";
+import { createHash } from "node:crypto";
 
 import { google, sheets_v4 } from "googleapis";
 import type {
-  Guest,
-  GuestResponse,
   Invitation,
   RsvpSubmission,
 } from "@/types/invitation";
-import { validateSubmissionForInvitation } from "@/lib/rsvp-validation";
-import { AppError } from "@/lib/app-error";
+import { rsvpSchema, validateSubmissionForInvitation } from "./rsvp-validation";
+import { AppError } from "./app-error";
 
-const SHEET_RANGE = "Sheet1!A3:N";
+const SHEET_RANGE = "Sheet1!A3:Q";
 const DEMO_TOKEN = "demo-alei-scarlett-2026";
 const tokenWrites = new Map<string, Promise<void>>();
 
@@ -65,24 +64,6 @@ function getSheetsClient(): sheets_v4.Sheets {
   return google.sheets({ version: "v4", auth });
 }
 
-function parseGuests(value: string): Guest[] {
-  const parsed: unknown = JSON.parse(value);
-  if (
-    !Array.isArray(parsed) ||
-    parsed.some(
-      (guest) =>
-        typeof guest !== "object" ||
-        guest === null ||
-        typeof (guest as Guest).id !== "string" ||
-        typeof (guest as Guest).name !== "string",
-    )
-  ) {
-    throw new Error("La columna de invitados contiene JSON inválido.");
-  }
-
-  return parsed as Guest[];
-}
-
 export async function getInvitation(
   token: string,
 ): Promise<Invitation | null> {
@@ -105,24 +86,45 @@ export async function getInvitation(
 
   if (!row) return null;
 
+  return invitationFromRow(token, row);
+}
+
+function invitationFromRow(token: string, row: unknown[]): Invitation {
+  const names = String(row[14] ?? "").split(/\r?\n/).map((name) => name.trim()).filter(Boolean);
+  if (new Set(names).size !== names.length || names.length > 20) {
+    throw new Error("Usa hasta 20 nombres distintos en la columna O.");
+  }
   const invitation: Invitation = {
     token,
     groupName: String(row[0] ?? "Invitados"),
     greeting: "Con mucho cariño, reservamos estos lugares para ustedes.",
-    guests: [{ id: `${token}-guest`, name: String(row[0] ?? "Invitado") }],
+    guests: names.length ? names.map((name) => ({
+      id: createHash("sha256").update(`${token}:${name}`).digest("hex"),
+      name,
+    })) : [{ id: `${token}-guest`, name: String(row[0] ?? "Invitado") }],
     maxPasses: Number(row[1]) || 1,
     active: true,
     civil: String(row[11] ?? "").trim().toUpperCase() === "CIVIL",
   };
 
-  const isExpired =
-    invitation.expiresAt &&
-    new Date(invitation.expiresAt).getTime() < Date.now();
-  if (!invitation.active || isExpired) return null;
-
-  invitation.response = row[9]
-    ? { guests: [{ guestId: `${token}-guest`, attending: String(row[9]).toLowerCase() === "sí", dietary: "" }], phone: String(row[5] ?? ""), message: "" }
-    : undefined;
+  if (row[15]) {
+    const saved = rsvpSchema.parse(JSON.parse(String(row[15])));
+    if (saved.token !== token) throw new Error("La respuesta guardada no corresponde a esta invitación.");
+    invitation.response = {
+      guests: saved.guests.filter((response) => invitation.guests.some((guest) => guest.id === response.guestId)),
+      phone: saved.phone,
+      message: saved.message,
+    };
+  } else if (!names.length) {
+    const status = String(row[9] ?? "").trim().toLowerCase();
+    if (["sí", "si", "no"].includes(status)) {
+      invitation.response = {
+        guests: [{ guestId: `${token}-guest`, attending: status !== "no", dietary: "" }],
+        phone: String(row[5] ?? ""),
+        message: "",
+      };
+    }
+  }
   return invitation;
 }
 
@@ -154,20 +156,27 @@ async function saveRsvpUnsafe(submission: RsvpSubmission) {
     range: SHEET_RANGE,
   });
   const rows = responseRows.data.values ?? [];
-  const guestResponse = submission.guests[0];
-  if (guestResponse) {
-    const guest = invitation.guests.find(
-      (item) => item.id === guestResponse.guestId,
-    );
-    if (!guest) return { updated: false, demo: false };
-
-    const values = [
-      guestResponse.attending ? "Sí" : "No",
-      submission.guests.filter((item) => item.attending).length,
-    ];
-    const existingIndex = rows.findIndex((row) => row[12] === submission.token);
-    if (existingIndex >= 0) await sheets.spreadsheets.values.batchUpdate({ spreadsheetId, requestBody: { valueInputOption: "RAW", data: [{ range: `Sheet1!J${existingIndex + 3}:K${existingIndex + 3}`, values: [values] }] } });
-  }
+  const existingIndex = rows.findIndex((row) => row[12] === submission.token);
+  if (existingIndex < 0) throw new AppError("La invitación ya no está disponible.", 404);
+  const latest = invitationFromRow(submission.token, rows[existingIndex]);
+  validateSubmissionForInvitation(submission, latest);
+  const rowNumber = existingIndex + 3;
+  const attending = submission.guests.filter((guest) => guest.attending).length;
+  const summary = submission.guests.map((response) => {
+    const guest = latest.guests.find((item) => item.id === response.guestId)!;
+    return `${guest.name}: ${response.attending ? "Confirmado" : "No asistirá"}`;
+  }).join("\n");
+  await sheets.spreadsheets.values.batchUpdate({
+    spreadsheetId,
+    requestBody: {
+      valueInputOption: "RAW",
+      data: [
+        { range: `Sheet1!F${rowNumber}`, values: [[submission.phone]] },
+        { range: `Sheet1!J${rowNumber}:K${rowNumber}`, values: [[attending === 0 ? "No" : attending === submission.guests.length ? "Sí" : "Parcial", attending]] },
+        { range: `Sheet1!P${rowNumber}:Q${rowNumber}`, values: [[JSON.stringify(submission), summary]] },
+      ],
+    },
+  });
 
   return { updated: true, demo: false };
 }

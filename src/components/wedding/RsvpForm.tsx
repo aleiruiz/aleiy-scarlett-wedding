@@ -41,6 +41,7 @@ export function RsvpForm({ invitation }: { invitation: Invitation }) {
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [feedback, setFeedback] = useState("");
+  const [savedResponse, setSavedResponse] = useState(previous);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -74,8 +75,21 @@ export function RsvpForm({ invitation }: { invitation: Invitation }) {
       const result = (await response.json()) as {
         error?: string;
         message?: string;
+        demo?: boolean;
       };
       if (!response.ok) throw new Error(result.error);
+
+      if (!result.demo) {
+        setSavedResponse({
+          guests: invitation.guests.map((guest) => ({
+            guestId: guest.id,
+            attending: attendance[guest.id] === true,
+            dietary: dietary[guest.id],
+          })),
+          phone,
+          message,
+        });
+      }
 
       setStatus("success");
       setFeedback(result.message ?? "¡Gracias por confirmar!");
@@ -101,6 +115,13 @@ export function RsvpForm({ invitation }: { invitation: Invitation }) {
         {invitation.guests.map((guest) => (
           <fieldset className="guest-card" key={guest.id}>
             <legend>{guest.name}</legend>
+            <p role="status">
+              Estado guardado: {savedResponse?.guests.find((item) => item.guestId === guest.id)?.attending === true
+                ? "Asistencia confirmada"
+                : savedResponse?.guests.find((item) => item.guestId === guest.id)?.attending === false
+                  ? "No asistirá"
+                  : "Pendiente de respuesta"}
+            </p>
             <div className="attendance-buttons">
               <button
                 type="button"
@@ -186,7 +207,7 @@ export function RsvpForm({ invitation }: { invitation: Invitation }) {
         ) : (
           <Send size={18} aria-hidden="true" />
         )}
-        {previous ? "Actualizar confirmación" : "Enviar confirmación"}
+        {savedResponse ? "Actualizar confirmación" : "Enviar confirmación"}
       </button>
 
       {feedback && (
