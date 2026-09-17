@@ -56,14 +56,15 @@ La selección y las posiciones de cada fotografía se encuentran en
 | L | `CIVIL` si incluye ceremonia civil; vacío en otro caso |
 | M | Token privado único, de 16 a 200 caracteres |
 | N | Enlace: `https://tu-dominio.com/invitacion/TOKEN` |
-| O | Nombres completos, uno por línea dentro de la misma celda |
+| O | Nombres completos separados por ` - ` dentro de la misma celda |
 | P | Respuesta JSON automática; no editar |
 | Q | Resumen automático por nombre: Confirmado o No asistirá |
 
-3. En O escribe hasta 20 nombres distintos. No necesitas escribir JSON.
+3. En O escribe hasta 20 nombres distintos separados por ` - `, por ejemplo
+   `Nancy Ortega - Jorge Muñoz`. No necesitas escribir JSON.
    Los pases en B limitan cuántas personas pueden confirmar asistencia.
-   Sin nombres en O se conserva el comportamiento anterior: A es el único
-   nombre mostrado. Para desactivar una invitación, elimina su fila.
+   Si O está vacío, el sitio muestra `Invitado 1`, `Invitado 2`, etc., según
+   los pases de B. Para desactivar una invitación, elimina su fila.
 
 4. En Google Cloud, habilita **Google Sheets API** y crea una cuenta de
    servicio.
@@ -109,7 +110,8 @@ npm run generate:invitations
 El archivo `data/invitations.generated.csv` incluye las columnas A–Q y tokens
 aleatorios. Importa sus encabezados en la fila 2 de `Sheet1` y sus datos desde
 la fila 3. No sobrescribas invitaciones que ya repartiste: regenerar crea enlaces
-nuevos. Para agregar personas a un grupo existente, edita O directamente.
+nuevos. Para agregar personas a un grupo existente, edita O directamente y
+sepáralas con ` - `.
 
 Para indicar rutas distintas:
 

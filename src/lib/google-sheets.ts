@@ -90,19 +90,26 @@ export async function getInvitation(
 }
 
 function invitationFromRow(token: string, row: unknown[]): Invitation {
-  const names = String(row[14] ?? "").split(/\r?\n/).map((name) => name.trim()).filter(Boolean);
+  const names = String(row[14] ?? "")
+    .split(/\s+-\s+|\r?\n/)
+    .map((name) => name.trim())
+    .filter(Boolean);
   if (new Set(names).size !== names.length || names.length > 20) {
     throw new Error("Usa hasta 20 nombres distintos en la columna O.");
   }
+  const maxPasses = Number(row[1]) || 1;
+  const guestNames = names.length
+    ? names
+    : Array.from({ length: maxPasses }, (_, index) => `Invitado ${index + 1}`);
   const invitation: Invitation = {
     token,
     groupName: String(row[0] ?? "Invitados"),
     greeting: "Con mucho cariño, reservamos estos lugares para ustedes.",
-    guests: names.length ? names.map((name) => ({
+    guests: guestNames.map((name) => ({
       id: createHash("sha256").update(`${token}:${name}`).digest("hex"),
       name,
-    })) : [{ id: `${token}-guest`, name: String(row[0] ?? "Invitado") }],
-    maxPasses: Number(row[1]) || 1,
+    })),
+    maxPasses,
     active: true,
     civil: String(row[11] ?? "").trim().toUpperCase() === "CIVIL",
   };
@@ -115,15 +122,6 @@ function invitationFromRow(token: string, row: unknown[]): Invitation {
       phone: saved.phone,
       message: saved.message,
     };
-  } else if (!names.length) {
-    const status = String(row[9] ?? "").trim().toLowerCase();
-    if (["sí", "si", "no"].includes(status)) {
-      invitation.response = {
-        guests: [{ guestId: `${token}-guest`, attending: status !== "no", dietary: "" }],
-        phone: String(row[5] ?? ""),
-        message: "",
-      };
-    }
   }
   return invitation;
 }

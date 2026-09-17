@@ -54,7 +54,7 @@ async function main() {
       maxPasses,
       "", "", "", "", "", "", "", "", "",
       group.civil ? "CIVIL" : "", token, link,
-      guests.join("\n"), "", "",
+      guests.join(" - "), "", "",
     ].map(csv);
   });
 
