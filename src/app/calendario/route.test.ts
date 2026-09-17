@@ -9,7 +9,6 @@ describe("wedding calendar", () => {
     expect(response.headers.get("Content-Type")).toContain("text/calendar");
     expect(content).toContain("DTSTART:20261122T010000Z");
     expect(content).not.toContain("Ceremonia civil");
-    expect(content).toContain("Trasnochador");
     expect(content).toContain("Península Eventos");
     expect(raw.split("\r\n").every(line => Buffer.byteLength(line) <= 75)).toBe(true);
   });

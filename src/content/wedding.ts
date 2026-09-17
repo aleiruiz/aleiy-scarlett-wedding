@@ -60,8 +60,6 @@ export const wedding = {
     { time: "7:30 p. m.", label: "Cena", civilOnly: false },
     { time: "8:30 p. m.", label: "Se abre la pista", civilOnly: false },
     { time: "9:00 p. m.", label: "Happening", civilOnly: false },
-    { time: "10:15 p. m.", label: "Lanzamiento del ramo", civilOnly: false },
-    { time: "10:30 p. m.", label: "Trasnochador", civilOnly: false },
   ],
   attire: {
     title: "Código de vestimenta",
