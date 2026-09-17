@@ -20,8 +20,8 @@ beforeEach(() => {
   row = Array(17).fill("");
   row[0] = "Familia Prueba";
   row[1] = "2";
-  row[12] = token;
-  row[14] = "Ana - Luis";
+  row[13] = token;
+  row[2] = "Ana - Luis";
   get.mockReset().mockImplementation(async () => ({ data: { values: [row] } }));
   batchUpdate.mockReset().mockResolvedValue({});
 });
@@ -32,7 +32,7 @@ describe("invitaciones en Google Sheets", () => {
     const first = await getInvitation(token);
     expect(first?.guests.map((guest) => guest.name)).toEqual(["Ana", "Luis"]);
     expect(first?.response).toBeUndefined();
-    row[14] = "Luis - Ana";
+    row[2] = "Luis - Ana";
     expect((await getInvitation(token))?.guests).toEqual(first?.guests.toReversed());
   });
 
@@ -46,16 +46,16 @@ describe("invitaciones en Google Sheets", () => {
     };
     await expect(saveRsvp(submission)).resolves.toEqual({ updated: true, demo: false });
     const data = batchUpdate.mock.calls[0][0].requestBody.data;
-    expect(data).toContainEqual({ range: "Sheet1!J3:K3", values: [["Parcial", 1]] });
-    expect(data).toContainEqual({ range: "Sheet1!F3", values: [[submission.phone]] });
+    expect(data).toContainEqual({ range: "Sheet1!K3:L3", values: [["Parcial", 1]] });
+    expect(data).toContainEqual({ range: "Sheet1!G3", values: [[submission.phone]] });
     row[15] = data.find((item: { range: string }) => item.range === "Sheet1!P3:Q3").values[0][0];
     expect((await getInvitation(token))?.response).toEqual({ guests: submission.guests, phone: submission.phone, message: submission.message });
-    row[14] = "Ana - Pedro";
+    row[2] = "Ana - Pedro";
     expect((await getInvitation(token))?.response?.guests).toEqual([submission.guests[0]]);
   });
 
   it("respeta el rechazo anterior y no interpreta pendientes como rechazo", async () => {
-    row[14] = "";
+    row[2] = "";
     row[9] = "No";
     expect((await getInvitation(token))?.guests.map((guest) => guest.name)).toEqual(["Invitado 1", "Invitado 2"]);
     expect((await getInvitation(token))?.response).toBeUndefined();
@@ -64,12 +64,12 @@ describe("invitaciones en Google Sheets", () => {
   });
 
   it("admite saltos de línea de hojas anteriores", async () => {
-    row[14] = "Ana\nLuis";
+    row[2] = "Ana\nLuis";
     expect((await getInvitation(token))?.guests.map((guest) => guest.name)).toEqual(["Ana", "Luis"]);
   });
 
   it("completa los pases sin nombre con invitados genéricos", async () => {
-    row[14] = "Nancy Ortega";
+    row[2] = "Nancy Ortega";
     expect((await getInvitation(token))?.guests.map((guest) => guest.name)).toEqual([
       "Nancy Ortega",
       "Invitado 1",

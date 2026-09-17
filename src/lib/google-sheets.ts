@@ -82,7 +82,7 @@ export async function getInvitation(
     spreadsheetId: process.env.GOOGLE_SHEETS_ID,
     range: SHEET_RANGE,
   });
-  const row = (result.data.values ?? []).find((item) => item[12] === token);
+  const row = (result.data.values ?? []).find((item) => item[13] === token);
 
   if (!row) return null;
 
@@ -90,7 +90,7 @@ export async function getInvitation(
 }
 
 function invitationFromRow(token: string, row: unknown[]): Invitation {
-  const names = String(row[14] ?? "")
+  const names = String(row[2] ?? "")
     .split(/\s+-\s+|\r?\n/)
     .map((name) => name.trim())
     .filter(Boolean);
@@ -113,7 +113,7 @@ function invitationFromRow(token: string, row: unknown[]): Invitation {
     })),
     maxPasses,
     active: true,
-    civil: String(row[11] ?? "").trim().toUpperCase() === "CIVIL",
+    civil: String(row[12] ?? "").trim().toUpperCase() === "CIVIL",
   };
 
   if (row[15]) {
@@ -156,7 +156,7 @@ async function saveRsvpUnsafe(submission: RsvpSubmission) {
     range: SHEET_RANGE,
   });
   const rows = responseRows.data.values ?? [];
-  const existingIndex = rows.findIndex((row) => row[12] === submission.token);
+  const existingIndex = rows.findIndex((row) => row[13] === submission.token);
   if (existingIndex < 0) throw new AppError("La invitación ya no está disponible.", 404);
   const latest = invitationFromRow(submission.token, rows[existingIndex]);
   validateSubmissionForInvitation(submission, latest);
@@ -171,8 +171,8 @@ async function saveRsvpUnsafe(submission: RsvpSubmission) {
     requestBody: {
       valueInputOption: "RAW",
       data: [
-        { range: `Sheet1!F${rowNumber}`, values: [[submission.phone]] },
-        { range: `Sheet1!J${rowNumber}:K${rowNumber}`, values: [[attending === 0 ? "No" : attending === submission.guests.length ? "Sí" : "Parcial", attending]] },
+        { range: `Sheet1!G${rowNumber}`, values: [[submission.phone]] },
+        { range: `Sheet1!K${rowNumber}:L${rowNumber}`, values: [[attending === 0 ? "No" : attending === submission.guests.length ? "Sí" : "Parcial", attending]] },
         { range: `Sheet1!P${rowNumber}:Q${rowNumber}`, values: [[JSON.stringify(submission), summary]] },
       ],
     },

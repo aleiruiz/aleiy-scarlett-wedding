@@ -50,17 +50,17 @@ La selección y las posiciones de cada fotografía se encuentran en
 | --- | --- |
 | A | Nombre de la familia o grupo |
 | B | Número de pases |
-| F | WhatsApp (se actualiza al responder) |
-| J | Resumen automático: Sí, No o Parcial |
-| K | Total de asistentes confirmados |
-| L | `CIVIL` si incluye ceremonia civil; vacío en otro caso |
-| M | Token privado único, de 16 a 200 caracteres |
-| N | Enlace: `https://tu-dominio.com/invitacion/TOKEN` |
-| O | Nombres completos separados por ` - ` dentro de la misma celda |
+| C | Nombres completos separados por ` - ` dentro de la misma celda |
+| G | WhatsApp (se actualiza al responder) |
+| K | Resumen automático: Sí, No o Parcial |
+| L | Total de asistentes confirmados |
+| M | `CIVIL` si incluye ceremonia civil; vacío en otro caso |
+| N | Token privado único, de 16 a 200 caracteres |
+| O | Enlace: `https://tu-dominio.com/invitacion/TOKEN` |
 | P | Respuesta JSON automática; no editar |
 | Q | Resumen automático por nombre: Confirmado o No asistirá |
 
-3. En O escribe hasta 20 nombres distintos separados por ` - `, por ejemplo
+3. En C escribe hasta 20 nombres distintos separados por ` - `, por ejemplo
    `Nancy Ortega - Jorge Muñoz`. No necesitas escribir JSON.
    Los pases en B limitan cuántas personas pueden confirmar asistencia.
    Si faltan nombres para completar los pases, el sitio agrega `Invitado 1`,
@@ -82,7 +82,7 @@ INVITATION_BASE_URL
 La llave privada debe conservar los saltos de línea como `\n`. Las credenciales
 solo se usan en el servidor y nunca se envían al navegador.
 
-La columna L debe contener `CIVIL` para mostrar ceremonia y llegada temprana.
+La columna M debe contener `CIVIL` para mostrar ceremonia y llegada temprana.
 Un valor vacío oculta ambos eventos y la tarjeta de ceremonia.
 
 Cada invitación privada muestra los estados guardados junto a los nombres.
@@ -111,7 +111,7 @@ npm run generate:invitations
 El archivo `data/invitations.generated.csv` incluye las columnas A–Q y tokens
 aleatorios. Importa sus encabezados en la fila 2 de `Sheet1` y sus datos desde
 la fila 3. No sobrescribas invitaciones que ya repartiste: regenerar crea enlaces
-nuevos. Para agregar personas a un grupo existente, edita O directamente y
+nuevos. Para agregar personas a un grupo existente, edita C directamente y
 sepáralas con ` - `.
 
 Para indicar rutas distintas:

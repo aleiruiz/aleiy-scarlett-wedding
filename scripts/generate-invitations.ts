@@ -27,8 +27,8 @@ async function main() {
   ).replace(/\/$/, "");
   const groups = JSON.parse(await readFile(inputPath, "utf8")) as InputGroup[];
 
-  const header = ["Familia", "Pases", "", "", "", "WhatsApp", "", "", "",
-    "Confirmación", "Asistentes", "Civil", "Token", "Enlace", "Nombres", "Respuesta JSON", "Detalle"].map(csv);
+  const header = ["Familia", "Pases", "Nombres de invitados (separados por -)", "", "", "", "WhatsApp", "", "", "",
+    "Confirmación", "Asistentes", "Civil", "Token", "Enlace", "Respuesta RSVP", "Detalle de confirmación"].map(csv);
 
   const rows = groups.map((group) => {
     if (!group.groupName || group.guests.length === 0) {
@@ -50,11 +50,9 @@ async function main() {
     const token = randomBytes(24).toString("base64url");
     const link = `${baseUrl}/invitacion/${token}`;
     return [
-      group.groupName,
-      maxPasses,
+      group.groupName, maxPasses, guests.join(" - "),
       "", "", "", "", "", "", "", "", "",
-      group.civil ? "CIVIL" : "", token, link,
-      guests.join(" - "), "", "",
+      group.civil ? "CIVIL" : "", token, link, "", "",
     ].map(csv);
   });
 
