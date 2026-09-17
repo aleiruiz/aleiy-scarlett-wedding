@@ -33,6 +33,7 @@ const parisienne = Parisienne({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://aleiy-scarlett-wedding.vercel.app"),
   title: "Alei & Scarlett | Nuestra boda",
   description:
     "Acompáñanos a celebrar nuestra boda en Península Eventos, Santiago, Nuevo León.",
