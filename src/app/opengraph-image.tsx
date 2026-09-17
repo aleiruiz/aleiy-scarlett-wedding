@@ -23,9 +23,8 @@ export default function OpenGraphImage() {
           color: "#26201c",
           display: "flex",
           height: "100%",
-          justifyContent: "space-between",
+          justifyContent: "center",
           overflow: "hidden",
-          padding: "58px 88px",
           position: "relative",
           width: "100%",
         }}
@@ -37,32 +36,37 @@ export default function OpenGraphImage() {
             height: 690,
             opacity: 0.2,
             position: "absolute",
-            right: -220,
-            top: -185,
+            left: -280,
+            top: -210,
             width: 690,
           }}
         />
-        <div style={{ display: "flex", flexDirection: "column", maxWidth: 625 }}>
-          <div style={{ color: "#bd7c18", fontSize: 31, letterSpacing: 5 }}>
+        <div
+          style={{
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "center",
+            width: 520,
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse requires a standard image element. */}
+          <img
+            alt="Monograma de Alei y Scarlett"
+            height={250}
+            src={monogram}
+            style={{ objectFit: "contain", width: 250 }}
+          />
+          <div style={{ color: "#bd7c18", fontSize: 24, letterSpacing: 4, marginTop: 8 }}>
             NOS CASAMOS
           </div>
-          <div style={{ fontFamily: "serif", fontSize: 96, lineHeight: 1.02, marginTop: 25 }}>
+          <div style={{ fontFamily: "serif", fontSize: 62, lineHeight: 1.02, marginTop: 15 }}>
             Alei &amp; Scarlett
           </div>
-          <div style={{ fontSize: 33, marginTop: 36 }}>
-            21 de noviembre de 2026
-          </div>
-          <div style={{ color: "#786c61", fontSize: 27, marginTop: 14 }}>
-            Santiago, Nuevo León
+          <div style={{ color: "#786c61", fontSize: 25, marginTop: 20 }}>
+            21 de noviembre de 2026 · Santiago, Nuevo León
           </div>
         </div>
-        {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse requires a standard image element. */}
-        <img
-          alt="Monograma de Alei y Scarlett"
-          height={390}
-          src={monogram}
-          style={{ objectFit: "contain", width: 390 }}
-        />
       </div>
     ),
     size,
