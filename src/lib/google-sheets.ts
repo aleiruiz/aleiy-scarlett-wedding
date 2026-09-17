@@ -67,8 +67,11 @@ function getSheetsClient(): sheets_v4.Sheets {
 export async function getInvitation(
   token: string,
 ): Promise<Invitation | null> {
+  // The demo is always available for portfolio previews, even in production
+  // deployments that use Google Sheets for private invitations.
+  if (token === DEMO_TOKEN) return demoInvitation;
+
   if (!hasSheetsConfiguration()) {
-    if (token === DEMO_TOKEN) return demoInvitation;
     const stored = process.env.INVITATIONS_JSON?.trim() || "[]";
     const json = stored.startsWith("gzip:")
       ? gunzipSync(Buffer.from(stored.slice(5), "base64")).toString("utf8")

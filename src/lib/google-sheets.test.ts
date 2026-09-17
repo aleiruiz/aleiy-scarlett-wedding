@@ -28,6 +28,12 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllEnvs());
 
 describe("invitaciones en Google Sheets", () => {
+  it("mantiene disponible la invitación demo con Google Sheets configurado", async () => {
+    const invitation = await getInvitation("demo-alei-scarlett-2026");
+    expect(invitation?.groupName).toBe("Familia Hernández");
+    expect(get).not.toHaveBeenCalled();
+  });
+
   it("lee nombres y conserva IDs al reordenarlos", async () => {
     const first = await getInvitation(token);
     expect(first?.guests.map((guest) => guest.name)).toEqual(["Ana", "Luis"]);
