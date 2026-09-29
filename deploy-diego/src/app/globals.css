@@ -1,17 +1,5 @@
 @import "tailwindcss";
 
-/* Lumbre marketplace */
-.marketplace-page { --ink: #25362e; --muted: #78827a; --sand: #f5f1e9; --peach: #e6a18a; --lavender: #ded9e9; min-height: 100svh; overflow: hidden; color: var(--ink); background: var(--sand); font-family: var(--font-body), sans-serif; }
-.marketplace-nav { display:flex; max-width:1280px; margin:auto; padding:1.6rem max(5vw,1.5rem); align-items:center; justify-content:space-between; gap:2rem; }
-.brand-mark { color:var(--ink); font-family:var(--font-title),serif; font-size:1.65rem; letter-spacing:-.08em; }.brand-mark span { font-style:italic; }.marketplace-nav-links { display:flex; gap:2.2rem; color:#637069; font-size:.7rem; font-weight:600; letter-spacing:.07em; }.marketplace-nav-links a:hover,.text-link:hover { color:var(--peach); }.nav-cta { display:inline-flex; padding:.7rem 1rem; align-items:center; gap:.45rem; border:1px solid #c9c6bd; border-radius:999px; font-size:.68rem; font-weight:600; }
-.marketplace-hero { display:grid; max-width:1280px; min-height:650px; margin:auto; padding:4rem max(5vw,1.5rem) 5rem; align-items:center; gap:3rem; grid-template-columns:1fr 1fr; }.hero-copy { max-width:590px; }.marketplace-eyebrow { display:flex; margin:0 0 1.2rem; align-items:center; gap:.5rem; color:#a66f5b; font-size:.67rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; }.marketplace-hero h1,.template-section h2,.how-section h2 { margin:0; font-family:var(--font-title),serif; font-size:clamp(3.8rem,6.8vw,6.5rem); font-weight:400; letter-spacing:-.07em; line-height:.86; }.marketplace-hero h1 em,.template-section h2 em,.how-section h2 em,.marketplace-bottom em { color:var(--peach); font-style:italic; }.hero-description { max-width:465px; margin:2rem 0; color:#68766e; font-size:1rem; line-height:1.8; }.hero-actions { display:flex; align-items:center; gap:1.4rem; }.marketplace-button { display:inline-flex; min-height:49px; padding:.9rem 1.35rem; align-items:center; gap:.65rem; border-radius:2px; font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; transition:transform .2s,box-shadow .2s; }.marketplace-button:hover { transform:translateY(-3px); box-shadow:0 12px 25px #23372a1c; }.marketplace-button.dark { color:white; background:var(--ink); }.marketplace-button.light { color:var(--ink); background:#f6eee2; }.text-link { display:inline-flex; align-items:center; gap:.5rem; color:#6d786f; font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }.text-link span { font-size:1.1rem; }.hero-proof { display:flex; margin-top:4rem; align-items:center; gap:.7rem; color:#758078; font-size:.68rem; line-height:1.5; }.hero-proof strong { color:var(--ink); }.avatar-stack { display:flex; }.avatar-stack i { display:block; width:31px; height:31px; margin-left:-7px; border:2px solid var(--sand); border-radius:50%; background:#c8ad91 url('/photos/family.webp') center/cover; }.avatar-stack i:first-child { margin-left:0; background-color:#b8c8bd; background-image:url('/photos/entry.webp'); }.avatar-stack i:last-child { background-color:#de9d84; }
-.hero-art { position:relative; min-height:500px; isolation:isolate; }.hero-art::before { position:absolute; inset:6% 5% 0 13%; border-radius:50% 50% 4% 4%; background:var(--lavender); content:""; z-index:-2; transform:rotate(-7deg); }.hero-card-back { position:absolute; top:7%; right:8%; width:67%; height:84%; border:1px solid #fff9; background:#b9c7b7 url('/photos/entry.webp') center/cover; box-shadow:12px 18px 35px #394d391f; transform:rotate(8deg); }.hero-card { position:absolute; bottom:1%; left:10%; display:flex; width:61%; min-height:370px; padding:2rem; align-items:center; flex-direction:column; justify-content:center; border:1px solid #dfd6c6; color:#4d624e; background:#fbf8f1; box-shadow:12px 20px 35px #394d3930; text-align:center; transform:rotate(-6deg); }.card-tiny,.card-date { font-size:.5rem; letter-spacing:.28em; }.card-flower { margin:2rem 0 .8rem; color:#ad7963; font-size:3.2rem; }.hero-card p { margin:0; font-family:var(--font-display),serif; font-size:2.7rem; line-height:.88; }.hero-card p i { color:#ad7963; font-size:2.25rem; }.hero-card small { margin-top:1.5rem; font-size:.54rem; letter-spacing:.25em; text-transform:uppercase; }.card-line { width:45px; margin:1.25rem 0; border-top:1px solid #bc9f68; }.hero-sticker { position:absolute; right:0; bottom:9%; display:flex; padding:.9rem; align-items:center; gap:.3rem; color:white; background:#b77e68; font-family:var(--font-display),serif; font-size:1rem; line-height:.8; transform:rotate(7deg); }.hero-sticker b { font-style:italic; font-weight:400; }
-.trust-row { display:flex; max-width:1280px; margin:auto; padding:1.25rem max(5vw,1.5rem); align-items:center; justify-content:space-between; border-top:1px solid #dcd6ca; color:#788078; font-size:.64rem; letter-spacing:.06em; }.trust-row>span { color:#ad7963; font-family:var(--font-title),serif; font-size:1.25rem; letter-spacing:0; }.trust-row div { display:flex; gap:1.7rem; }
-.template-section { max-width:1280px; margin:auto; padding:8rem max(5vw,1.5rem); }.section-heading { display:flex; margin-bottom:3.5rem; align-items:end; justify-content:space-between; gap:2rem; }.template-tools { display:flex; align-items:end; flex-direction:column; gap:1.2rem; }.search-box { display:flex; width:190px; padding:.45rem 0; align-items:center; gap:.5rem; border-bottom:1px solid #cfc8bc; color:#8a9189; }.search-box input { width:100%; border:0; outline:0; color:var(--ink); background:transparent; font-size:.72rem; }.category-tabs { display:flex; gap:.4rem; }.category-tabs button { padding:.55rem .8rem; border:0; border-radius:999px; color:#879087; cursor:pointer; background:transparent; font-size:.65rem; }.category-tabs button.active,.category-tabs button:hover { color:white; background:var(--ink); }.template-grid { display:grid; gap:1.6rem; grid-template-columns:repeat(3,1fr); }.template-card { min-width:0; }.template-image { position:relative; height:370px; overflow:hidden; background:#d7dfd2; }.template-image img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }.template-card:hover .template-image img { transform:scale(1.05); }.template-tag { position:absolute; top:1rem; left:1rem; padding:.4rem .6rem; color:var(--ink); background:#f8f2e9e8; font-size:.58rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }.save-template { position:absolute; top:1rem; right:1rem; display:grid; width:32px; height:32px; border:0; border-radius:50%; place-items:center; color:var(--ink); cursor:pointer; background:#f8f2e9e8; }.template-preview { position:absolute; right:1rem; bottom:1rem; left:1rem; padding:.7rem; opacity:0; color:var(--ink); background:#f8f2e9ee; text-align:center; transition:opacity .2s; }.template-card:hover .template-preview { opacity:1; }.template-preview a { display:flex; align-items:center; justify-content:center; gap:.5rem; font-size:.68rem; font-weight:700; text-transform:uppercase; }.template-info { padding:1.2rem .1rem; }.template-category { margin:0 0 .25rem; color:#ad7963; font-size:.6rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; }.template-info h3 { margin:0 0 .5rem; font-size:2rem; }.template-info>div:first-child>p:last-child { max-width:350px; margin:0; color:#768079; font-size:.78rem; line-height:1.6; }.template-bottom { display:flex; margin-top:1.3rem; align-items:center; gap:.55rem; }.template-price { margin-right:auto; font-size:.7rem; font-weight:700; }.swatches { display:flex; gap:.25rem; }.swatches i { width:14px; height:14px; border:1px solid #ffffff99; border-radius:50%; }.round-arrow { display:grid; width:34px; height:34px; margin-left:.6rem; place-items:center; border:1px solid #b8beb7; border-radius:50%; transition:background .2s,color .2s; }.round-arrow:hover { color:#fff; background:var(--ink); }
-.how-section { display:grid; padding:7rem max(8vw,1.5rem); gap:6vw; color:#f6f1e9; background:var(--ink); grid-template-columns:.7fr 1.3fr; }.how-intro>p:last-child { max-width:310px; margin-top:2rem; color:#bfcbc1; font-size:.86rem; }.how-section .marketplace-eyebrow { color:#d6a28d; }.steps { display:grid; gap:1rem; grid-template-columns:repeat(3,1fr); }.steps>div { padding-top:1.5rem; border-top:1px solid #82918766; }.steps span { color:#d6a28d; font-family:var(--font-title),serif; font-size:1.1rem; }.steps h3 { margin:3rem 0 1rem; color:#f6f1e9; font-size:1.55rem; }.steps p { color:#b4c2b7; font-size:.78rem; line-height:1.7; }
-.marketplace-bottom { display:flex; max-width:1280px; margin:auto; padding:6rem max(5vw,1.5rem); align-items:center; justify-content:space-between; }.marketplace-bottom>div { display:flex; align-items:start; gap:1rem; color:var(--peach); }.marketplace-bottom p { margin:0; color:var(--ink); font-family:var(--font-title),serif; font-size:2.8rem; line-height:.9; }.marketplace-footer { padding:3rem 1.5rem 2rem; border-top:1px solid #d9d3c8; text-align:center; }.marketplace-footer .brand-mark { display:block; }.marketplace-footer p { color:#7a837c; font-size:.75rem; }.marketplace-footer small { color:#a0a69f; font-size:.62rem; }
-@media (max-width:800px) { .marketplace-nav-links { display:none; }.marketplace-nav { padding-top:1.2rem; }.marketplace-hero { min-height:auto; padding-top:4rem; grid-template-columns:1fr; }.marketplace-hero h1 { font-size:clamp(3.4rem,16vw,5rem); }.hero-art { min-height:420px; margin-top:1rem; }.hero-card { min-height:300px; }.hero-card p { font-size:2.1rem; }.hero-card p i { font-size:1.8rem; }.trust-row { display:block; text-align:center; }.trust-row div { margin-top:1rem; flex-wrap:wrap; justify-content:center; }.section-heading { display:block; }.template-tools { margin-top:2.5rem; align-items:stretch; }.search-box { width:100%; }.category-tabs { overflow:auto; }.template-grid { grid-template-columns:1fr; }.template-image { height:330px; }.how-section { grid-template-columns:1fr; }.steps { grid-template-columns:1fr; }.steps h3 { margin-top:1rem; }.marketplace-bottom { display:block; }.marketplace-bottom p { margin-bottom:2rem; font-size:2.2rem; } }
-
 /* Diego Sae · Bluey-inspired birthday invitation */
 .party-page { --party-blue: #1676a9; --party-navy: #123b68; --party-yellow: #ffd34e; --party-coral: #f07b68; --party-cream: #fffaf0; min-height: 100svh; color: var(--party-navy); background: var(--party-cream); font-family: var(--font-body), sans-serif; overflow: hidden; }
 .party-page h1, .party-page h2, .party-page h3, .party-page p { margin-top: 0; }
@@ -55,63 +43,6 @@
   --clay: #ad7963;
   --gold: #b89a67;
   --line: rgba(38, 58, 43, 0.18);
-}
-
-/* Final desktop composition for the details reference. */
-@media (min-width: 801px) {
-  .details {
-    padding-top: 4.5rem;
-  }
-
-  .details > .section-heading {
-    position: relative;
-    display: block;
-    max-width: 1150px;
-    min-height: 320px;
-    margin: 0 auto 4.5rem;
-    text-align: left;
-  }
-
-  .details > .section-heading .eyebrow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 0;
-  }
-
-  .details > .section-heading h2 {
-    position: absolute;
-    top: 4.2rem;
-    left: 0;
-    max-width: 600px;
-    margin: 0;
-    font-size: clamp(4rem, 5.8vw, 5.7rem);
-    line-height: 0.9;
-  }
-
-  .details > .section-heading .botanical-divider {
-    position: absolute;
-    bottom: 0.35rem;
-    left: 0;
-    width: 145px;
-    margin: 0;
-  }
-
-  .details > .section-heading > p:not(.eyebrow) {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    margin: 0;
-    transform: translateX(-50%);
-    white-space: nowrap;
-  }
-
-  .details > .section-heading .calendar-actions {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin: 0;
-  }
 }
 
 @theme inline {
@@ -1281,7 +1212,7 @@ h3 {
 
 .event-grid {
   display: grid;
-  max-width: 1125px;
+  max-width: 1100px;
   margin: auto;
   gap: clamp(1.5rem, 4vw, 4rem);
   grid-template-columns: repeat(2, 1fr);
@@ -2284,63 +2215,6 @@ footer {
   }
 }
 
-/* Reference composition: tall details header with the event cards below the fold. */
-@media (min-width: 801px) {
-  .details {
-    padding-top: 4.5rem;
-  }
-
-  .details > .section-heading {
-    position: relative;
-    display: block;
-    max-width: 1150px;
-    min-height: 320px;
-    margin: 0 auto 4.5rem;
-    text-align: left;
-  }
-
-  .details > .section-heading .eyebrow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 0;
-  }
-
-  .details > .section-heading h2 {
-    position: absolute;
-    top: 4.2rem;
-    left: 0;
-    max-width: 600px;
-    margin: 0;
-    font-size: clamp(4rem, 5.8vw, 5.7rem);
-    line-height: 0.9;
-  }
-
-  .details > .section-heading .botanical-divider {
-    position: absolute;
-    bottom: 0.35rem;
-    left: 0;
-    width: 145px;
-    margin: 0;
-  }
-
-  .details > .section-heading > p:not(.eyebrow) {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    margin: 0;
-    transform: translateX(-50%);
-    white-space: nowrap;
-  }
-
-  .details > .section-heading .calendar-actions {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin: 0;
-  }
-}
-
 @media (min-width: 801px) and (max-height: 820px) {
   .welcome-stage {
     padding-top: 1.5rem;
@@ -2446,84 +2320,3 @@ footer {
 .calendar-links .button { min-height: 40px; padding: .65rem .9rem; font-size: .58rem; }
 .calendar-download { display: inline-flex; align-items: center; padding: .5rem; color: var(--sage-dark); font-size: .64rem; text-decoration: underline; }
 .gift-card .calendar-label { color: #d6dbd3; }
-
-/* Wedding details: keep this composition independent from marketplace headings. */
-.details > .section-heading {
-  display: grid;
-  max-width: 1125px;
-  min-height: 170px;
-  margin: 0 auto 4.5rem;
-  align-items: end;
-  column-gap: clamp(1rem, 2vw, 2rem);
-  grid-template-columns: minmax(90px, 0.7fr) minmax(300px, 3.1fr) minmax(76px, 0.75fr) minmax(150px, 1.45fr) minmax(175px, 1.6fr);
-  text-align: left;
-}
-
-.details > .section-heading .eyebrow {
-  margin-bottom: 0.25rem;
-}
-
-.details > .section-heading h2 {
-  max-width: 600px;
-  margin: 0;
-  font-size: clamp(3.8rem, 5.8vw, 5.7rem);
-  line-height: 0.9;
-}
-
-.details > .section-heading .botanical-divider {
-  width: 100%;
-  margin: 0 0 0.45rem;
-}
-
-.details > .section-heading > p:not(.eyebrow) {
-  margin: 0 0 0.18rem;
-  white-space: nowrap;
-}
-
-.details > .section-heading .calendar-actions {
-  align-self: end;
-  margin: 0;
-}
-
-.details > .section-heading .calendar-label {
-  margin-bottom: 0.65rem;
-}
-
-@media (max-width: 800px) {
-  .details > .section-heading {
-    min-height: 0;
-    margin-bottom: 3rem;
-    text-align: center;
-  }
-
-  .details > .section-heading .eyebrow,
-  .details > .section-heading h2,
-  .details > .section-heading .botanical-divider,
-  .details > .section-heading > p:not(.eyebrow),
-  .details > .section-heading .calendar-actions {
-    position: static;
-    margin-right: auto;
-    margin-left: auto;
-    transform: none;
-  }
-
-  .details > .section-heading .botanical-divider {
-    width: min(100%, 250px);
-    margin-top: 1.25rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .details > .section-heading > p:not(.eyebrow) {
-    white-space: normal;
-  }
-}
-
-@media (min-width: 801px) {
-  .details { padding-top: 4.5rem; }
-  .details > .section-heading { position: relative; display: block; max-width: 1150px; min-height: 320px; margin: 0 auto 4.5rem; text-align: left; }
-  .details > .section-heading .eyebrow { position: absolute; top: 0; left: 0; margin: 0; }
-  .details > .section-heading h2 { position: absolute; top: 4.2rem; left: 0; max-width: 600px; margin: 0; font-size: clamp(4rem, 5.8vw, 5.7rem); line-height: .9; }
-  .details > .section-heading .botanical-divider { position: absolute; bottom: .35rem; left: 0; width: 145px; margin: 0; }
-  .details > .section-heading > p:not(.eyebrow) { position: absolute; bottom: 0; left: 50%; margin: 0; transform: translateX(-50%); white-space: nowrap; }
-  .details > .section-heading .calendar-actions { position: absolute; right: 0; bottom: 0; margin: 0; }
-}
